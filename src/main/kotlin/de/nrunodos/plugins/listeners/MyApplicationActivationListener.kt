@@ -1,4 +1,4 @@
-package com.github.nrunodos.customcomparison.listeners
+package de.nrunodos.plugins.listeners
 
 import com.intellij.openapi.application.ApplicationActivationListener
 import com.intellij.openapi.diagnostic.thisLogger

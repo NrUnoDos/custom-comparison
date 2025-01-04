@@ -1,4 +1,4 @@
-package com.github.nrunodos.customcomparison.toolWindow
+package de.nrunodos.plugins.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -8,8 +8,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.nrunodos.customcomparison.MyBundle
-import com.github.nrunodos.customcomparison.services.MyProjectService
+import de.nrunodos.plugins.MyBundle
+import de.nrunodos.plugins.services.MyProjectService
 import javax.swing.JButton
 
 

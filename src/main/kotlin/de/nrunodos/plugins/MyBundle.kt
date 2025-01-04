@@ -1,4 +1,4 @@
-package com.github.nrunodos.customcomparison
+package de.nrunodos.plugins
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
