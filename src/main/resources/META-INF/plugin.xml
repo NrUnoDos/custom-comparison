@@ -6,13 +6,10 @@
 
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="de.nrunodos.plugins.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <applicationConfigurable groupId="tools" displayName="Custom Diff" id="de.nrunodos.plugins.CustomDiffConfig" instance="de.nrunodos.plugins.CustomDiffConfig"/>
+        <applicationService serviceImplementation="de.nrunodos.plugins.CustomDiffConfigState"/>
+        <diff.lang.DiffIgnoredRangeProvider implementation="de.nrunodos.plugins.CustomDiffProvider" order="first"/>
+        <notificationGroup displayType="BALLOON" id="Invalid regex"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="de.nrunodos.plugins.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
 </idea-plugin>
