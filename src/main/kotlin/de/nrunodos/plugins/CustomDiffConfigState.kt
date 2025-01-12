@@ -7,21 +7,17 @@ import com.intellij.openapi.components.Storage
 
 @State(name = "CustomDiffConfigState", storages = [Storage("CustomDiffConfigState.xml")])
 class CustomDiffConfigState : PersistentStateComponent<CustomDiffConfigState> {
-  var ignoreWhitespaces = true
-  val ignorePatterns = mutableListOf<String>()
+    var ignoreWhitespaces = true
+    val ignorePatterns = mutableListOf<String>()
 
-  override fun getState(): CustomDiffConfigState {
-    return this
-  }
+    override fun getState(): CustomDiffConfigState = this
 
-  override fun loadState(state: CustomDiffConfigState) {
-    this.ignorePatterns.clear()
-    this.ignorePatterns.addAll(state.ignorePatterns)
-  }
-
-  companion object {
-    fun getInstance(): CustomDiffConfigState {
-      return ApplicationManager.getApplication().getService(CustomDiffConfigState::class.java)
+    override fun loadState(state: CustomDiffConfigState) {
+        this.ignorePatterns.clear()
+        this.ignorePatterns.addAll(state.ignorePatterns)
     }
-  }
+
+    companion object {
+        fun getInstance(): CustomDiffConfigState = ApplicationManager.getApplication().getService(CustomDiffConfigState::class.java)
+    }
 }

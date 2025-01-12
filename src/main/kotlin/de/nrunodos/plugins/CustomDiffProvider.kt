@@ -13,44 +13,45 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.util.IncorrectOperationException
 
 class CustomDiffProvider : DiffIgnoredRangeProvider {
+    override fun getDescription(): String = "Custom comparison"
 
-  override fun getDescription(): String {
-    return "Custom comparison"
-  }
+    override fun accepts(
+        project: Project?,
+        content: DiffContent,
+    ): Boolean = true
 
-  override fun accepts(project: Project?, content: DiffContent): Boolean {
-    return true
-  }
+    override fun getIgnoredRanges(
+        project: Project?,
+        text: CharSequence,
+        content: DiffContent,
+    ): MutableList<TextRange> {
+        return ReadAction.compute<MutableList<TextRange>, IncorrectOperationException> {
+            val fileType = content.contentType ?: FileTypes.UNKNOWN
+            val psiFile = PsiFileFactory.getInstance(project).createFileFromText("", fileType, text)
+            val visitor = IgnoredPsiVisitor()
+            psiFile.accept(visitor)
 
-  override fun getIgnoredRanges(project: Project?, text: CharSequence, content: DiffContent): MutableList<TextRange> {
-    return ReadAction.compute<MutableList<TextRange>, IncorrectOperationException> {
-      val fileType = content.contentType ?: FileTypes.UNKNOWN
-      val psiFile = PsiFileFactory.getInstance(project).createFileFromText("", fileType, text)
-      val visitor = IgnoredPsiVisitor()
-      psiFile.accept(visitor)
-
-      return@compute visitor.textRanges
+            return@compute visitor.textRanges
+        }
     }
-  }
 
-  internal class IgnoredPsiVisitor : PsiElementVisitor() {
+    internal class IgnoredPsiVisitor : PsiElementVisitor() {
+        private val config: CustomDiffConfigState = CustomDiffConfigState.getInstance()
+        val textRanges = mutableListOf<TextRange>()
 
-    private val config: CustomDiffConfigState = CustomDiffConfigState.getInstance()
-    val textRanges = mutableListOf<TextRange>()
-
-    override fun visitElement(element: PsiElement) {
-      if (element.textLength == 0) {
-        return
-      }
-      if (config.ignoreWhitespaces && element is PsiWhiteSpace) {
-        textRanges.add(element.textRange)
-        return
-      }
-      if (config.ignorePatterns.any { Regex(it).matches(element.text) }) {
-        textRanges.add(element.textRange)
-        return
-      }
-      element.acceptChildren(this)
+        override fun visitElement(element: PsiElement) {
+            if (element.textLength == 0) {
+                return
+            }
+            if (config.ignoreWhitespaces && element is PsiWhiteSpace) {
+                textRanges.add(element.textRange)
+                return
+            }
+            if (config.ignorePatterns.any { Regex(it).matches(element.text) }) {
+                textRanges.add(element.textRange)
+                return
+            }
+            element.acceptChildren(this)
+        }
     }
-  }
 }
