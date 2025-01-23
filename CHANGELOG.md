@@ -5,6 +5,7 @@
 ## [Unreleased]
 
 - Integrated config UI into diff window
+- Enabling compatibility check against 2025 version
 
 ## [0.0.2] - 2025-01-08
 
