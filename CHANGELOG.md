@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- Integrated config UI into diff window
+
 ## [0.0.2] - 2025-01-08
 
 - Replaced placeholder logo

@@ -11,5 +11,6 @@
         <applicationService serviceImplementation="de.nrunodos.plugins.CustomDiffConfigState"/>
         <diff.lang.DiffIgnoredRangeProvider implementation="de.nrunodos.plugins.CustomDiffProvider" order="first"/>
         <notificationGroup displayType="BALLOON" id="Invalid regex"/>
+        <diff.DiffExtension implementation="de.nrunodos.plugins.ComparisonExtension"/>
     </extensions>
 </idea-plugin>
