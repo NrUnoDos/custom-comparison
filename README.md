@@ -11,7 +11,7 @@ Extends the standard comparison in order to mark specific changes as not-relevan
 
 Select "Custom Comparison" when comparing files / directories - it's in the same dropbox as "Do not ignore" and "Ignore whitespaces".
 
-Setup patterns beforehand via the settings dialog - search for "Custom Diff". 
+Setup patterns via the integrated settings dialog, that match the Psi elements you want to exclude from your diff view. 
 
 Please note that the diff logic from this plugin takes place over the default diff logic, therefore 
 overwriting language specific diff options like "Ignore imports".
