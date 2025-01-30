@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.0.4] - 2025-01-30
+
 - Adjust configuration UI to use less space
 
 ## [0.0.3] - 2025-01-23
@@ -21,7 +23,8 @@
 
 - Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
 
-[Unreleased]: https://github.com/NrUnoDos/custom-comparison/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/NrUnoDos/custom-comparison/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/NrUnoDos/custom-comparison/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/NrUnoDos/custom-comparison/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/NrUnoDos/custom-comparison/compare/v0.0.1-alpha...v0.0.2
 [0.0.1-alpha]: https://github.com/NrUnoDos/custom-comparison/commits/v0.0.1-alpha
