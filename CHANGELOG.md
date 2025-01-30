@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+- Adjust configuration UI to use less space
+
 ## [0.0.3] - 2025-01-23
 
 - Integrated config UI into diff window
