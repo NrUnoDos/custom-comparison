@@ -33,6 +33,7 @@ class IntegratedConfigurationPanel(
     init {
         rootPanel.layout = BoxLayout(rootPanel, BoxLayout.Y_AXIS)
         rootPanel.add(whitespaceToggle)
+        ignorePatterns.visibleRowCount = 3
         rootPanel.add(JScrollPane(ignorePatterns))
         rootPanel.add(addButton)
         rootPanel.add(removeButton)
