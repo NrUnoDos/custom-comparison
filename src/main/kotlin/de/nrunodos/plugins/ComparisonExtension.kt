@@ -4,6 +4,7 @@ import com.intellij.diff.DiffContext
 import com.intellij.diff.DiffExtension
 import com.intellij.diff.FrameDiffTool
 import com.intellij.diff.requests.DiffRequest
+import com.intellij.diff.tools.util.side.TwosideTextDiffViewer
 import java.awt.BorderLayout
 
 class ComparisonExtension : DiffExtension() {
@@ -15,7 +16,18 @@ class ComparisonExtension : DiffExtension() {
         if (viewer.javaClass.name == "com.intellij.diff.tools.dir.DirDiffViewer") {
             return
         }
+
         val gui = IntegratedConfigurationPanel(context, viewer)
+
+        if (viewer is TwosideTextDiffViewer) {
+            viewer.editors.forEach { editor ->
+                editor.addEditorMouseMotionListener(PsiPathHintMouseMotionListener())
+                editor.addEditorMouseListener(PsiElementIgnoreMouseListener(viewer) {
+                    gui.refreshConfiguration()
+                })
+            }
+        }
+
         viewer.component.add(gui.rootPanel, BorderLayout.SOUTH)
     }
 }

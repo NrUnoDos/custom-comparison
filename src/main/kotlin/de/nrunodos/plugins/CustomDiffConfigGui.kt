@@ -5,14 +5,7 @@ import com.intellij.notification.NotificationType
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBList
 import java.util.regex.PatternSyntaxException
-import javax.swing.BoxLayout
-import javax.swing.DefaultListModel
-import javax.swing.JButton
-import javax.swing.JCheckBox
-import javax.swing.JList
-import javax.swing.JOptionPane
-import javax.swing.JPanel
-import javax.swing.JScrollPane
+import javax.swing.*
 
 class CustomDiffConfigGui {
     private val configuration = CustomDiffConfigState.getInstance()
@@ -66,8 +59,8 @@ class CustomDiffConfigGui {
 
     fun isModified(): Boolean =
         configuration.ignoreWhitespaces != whitespaceToggle.isSelected ||
-            configuration.ignorePatterns.size != listModel.size ||
-            configuration.ignorePatterns.any { !listModel.contains(it) }
+                configuration.ignorePatterns.size != listModel.size ||
+                configuration.ignorePatterns.any { !listModel.contains(it) }
 
     fun apply() {
         configuration.ignoreWhitespaces = whitespaceToggle.isSelected
