@@ -22,13 +22,13 @@ class CustomDiffProvider : DiffIgnoredRangeProvider {
         text: CharSequence,
         content: DiffContent,
     ): MutableList<TextRange> {
-        return ReadAction.compute<MutableList<TextRange>, IncorrectOperationException> {
+        return ReadAction.computeBlocking <MutableList<TextRange>, IncorrectOperationException> {
             val fileType = content.contentType ?: FileTypes.UNKNOWN
             val psiFile = PsiFileFactory.getInstance(project).createFileFromText("", fileType, text)
             val visitor = IgnoredPsiVisitor()
             psiFile.accept(visitor)
 
-            return@compute visitor.textRanges
+            return@computeBlocking visitor.textRanges
         }
     }
 }
