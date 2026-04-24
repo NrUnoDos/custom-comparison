@@ -4,8 +4,11 @@ import com.intellij.diff.DiffContext
 import com.intellij.diff.DiffExtension
 import com.intellij.diff.FrameDiffTool
 import com.intellij.diff.requests.DiffRequest
+import com.intellij.diff.tools.util.base.TextDiffSettingsHolder
 import com.intellij.diff.tools.util.side.TwosideTextDiffViewer
+import com.intellij.diff.util.DiffUtil
 import java.awt.BorderLayout
+import javax.swing.JPanel
 
 class ComparisonExtension : DiffExtension() {
     override fun onViewerCreated(
@@ -28,6 +31,12 @@ class ComparisonExtension : DiffExtension() {
             }
         }
 
-        viewer.component.add(gui.rootPanel, BorderLayout.SOUTH)
+        val component = viewer.component
+        if (component.layout is BorderLayout) {
+            component.add(gui.rootPanel, BorderLayout.SOUTH)
+        } else {
+            component.add(gui.rootPanel)
+            component.revalidate()
+        }
     }
 }
