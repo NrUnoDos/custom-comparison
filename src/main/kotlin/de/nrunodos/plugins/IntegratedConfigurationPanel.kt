@@ -3,16 +3,22 @@ package de.nrunodos.plugins
 import com.intellij.diff.DiffContext
 import com.intellij.diff.FrameDiffTool.DiffViewer
 import com.intellij.diff.tools.util.base.DiffViewerBase
+import com.intellij.diff.tools.util.base.IgnorePolicy
+import com.intellij.diff.tools.util.base.TextDiffSettingsHolder.TextDiffSettings
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.ui.Messages
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBList
+import com.intellij.ui.dsl.builder.LabelPosition
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.ui.JBUI
-import java.awt.BorderLayout
 import java.util.regex.PatternSyntaxException
-import javax.swing.*
+import javax.swing.DefaultListModel
+import javax.swing.JCheckBox
+import javax.swing.JComponent
+import javax.swing.JPanel
 
 class IntegratedConfigurationPanel(
     val context: DiffContext,
@@ -20,7 +26,7 @@ class IntegratedConfigurationPanel(
 ) {
     private val configuration = CustomDiffConfigState.getInstance()
 
-    val rootPanel: JPanel = JPanel(BorderLayout())
+    val rootPanel: JPanel
     private val whitespaceToggle: JCheckBox = JBCheckBox("Ignore whitespaces")
 
     private val listModel = DefaultListModel<String>()
@@ -30,33 +36,21 @@ class IntegratedConfigurationPanel(
     private val ignoredPsiPaths: JBList<String> = JBList(psiListModel)
 
     init {
-        val topPanel = JPanel(BorderLayout())
-        topPanel.add(whitespaceToggle, BorderLayout.WEST)
-        topPanel.border = JBUI.Borders.empty(5)
-        rootPanel.add(topPanel, BorderLayout.NORTH)
-
-        val mainContent = JPanel()
-        mainContent.layout = BoxLayout(mainContent, BoxLayout.X_AXIS)
-
-        // Regex Patterns section
-        val patternsPanel = createRegexPatternsPanel()
-
-        val patternsWrapper = JPanel(BorderLayout())
-        patternsWrapper.add(JLabel("Regex Patterns:"), BorderLayout.NORTH)
-        patternsWrapper.add(patternsPanel, BorderLayout.CENTER)
-        patternsWrapper.border = JBUI.Borders.empty(5)
-
-        // PSI Elements section
-        val psiPanel = createPsiPathsPanel()
-
-        val psiWrapper = JPanel(BorderLayout())
-        psiWrapper.add(JLabel("Ignored PSI Elements (Alt+Click to add):"), BorderLayout.NORTH)
-        psiWrapper.add(psiPanel, BorderLayout.CENTER)
-        psiWrapper.border = JBUI.Borders.empty(5)
-
-        mainContent.add(patternsWrapper)
-        mainContent.add(psiWrapper)
-        rootPanel.add(mainContent, BorderLayout.CENTER)
+        rootPanel = panel {
+            collapsibleGroup("Configuration") {
+                row {
+                    cell(whitespaceToggle)
+                }
+                row {
+                    cell(createRegexPatternsPanel()).applyToComponent {
+                        preferredSize = JBUI.size(400, 200)
+                    }.resizableColumn().label("Regex patterns", LabelPosition.TOP)
+                    cell(createPsiPathsPanel()).applyToComponent {
+                        preferredSize = JBUI.size(400, 200)
+                    }.label("Ignored PSI elements (Alt+Click to add)", LabelPosition.TOP)
+                }
+            }.expanded = true
+        }
 
         // Initial values
         whitespaceToggle.isSelected = configuration.ignoreWhitespaces
@@ -70,6 +64,7 @@ class IntegratedConfigurationPanel(
 
         psiListModel.clear()
         psiListModel.addAll(configuration.ignoredPsiPaths)
+        updateVisibility()
     }
 
     private fun createRegexPatternsPanel(): JComponent {
@@ -190,6 +185,17 @@ class IntegratedConfigurationPanel(
         listModel.clear()
         listModel.addAll(configuration.ignorePatterns)
         whitespaceToggle.isSelected = configuration.ignoreWhitespaces
+        updateVisibility()
+    }
+
+    fun updateVisibility() {
+        var isCustomComparisonActive = false
+        val settings = context.getUserData(TextDiffSettings.KEY)
+        settings?.ignorePolicy?.let {
+            isCustomComparisonActive = it == IgnorePolicy.FORMATTING
+        }
+        
+        rootPanel.isVisible = isCustomComparisonActive
     }
 
     private fun refreshDiffWindow() {

@@ -6,9 +6,8 @@ import com.intellij.diff.FrameDiffTool
 import com.intellij.diff.requests.DiffRequest
 import com.intellij.diff.tools.util.base.TextDiffSettingsHolder
 import com.intellij.diff.tools.util.side.TwosideTextDiffViewer
-import com.intellij.diff.util.DiffUtil
+import com.intellij.openapi.util.ActionCallback
 import java.awt.BorderLayout
-import javax.swing.JPanel
 
 class ComparisonExtension : DiffExtension() {
     override fun onViewerCreated(
@@ -21,6 +20,13 @@ class ComparisonExtension : DiffExtension() {
         }
 
         val gui = IntegratedConfigurationPanel(context, viewer)
+
+        val settings = context.getUserData(TextDiffSettingsHolder.TextDiffSettings.KEY)
+        settings?.addListener(object : TextDiffSettingsHolder.TextDiffSettings.Listener {
+            override fun ignorePolicyChanged() {
+                gui.updateVisibility()
+            }
+        }, viewer)
 
         if (viewer is TwosideTextDiffViewer) {
             viewer.editors.forEach { editor ->
